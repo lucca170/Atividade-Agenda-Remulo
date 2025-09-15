@@ -1,0 +1,25 @@
+/* frontend/src/components/StatusPanel.css */
+.status-panel {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.status-card {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    flex-grow: 1;
+    margin: 0 10px;
+}
+
+.status-card h4 {
+    margin-top: 0;
+}
+
+.status-card p {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 0;
+}
