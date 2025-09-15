@@ -1,87 +1,63 @@
-// frontend/src/components/RegisterForm.jsx
-
 import React, { useState } from 'react';
-import api from '../services/api';
-import './FormModal.css';
+import { register } from '../services/api';
+import './Form.css';
 
-function RegisterForm({ onRegisterSuccess, onSwitchToLogin }) {
+// A props 'onSwitchToLogin' é recebida aqui
+function RegisterForm({ onRegister, onSwitchToLogin }) {
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  // --- ADIÇÃO AQUI ---
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleRegister = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isLoading) return; // Impede submissões múltiplas
-    
-    setIsLoading(true); // Desativa o botão
-    setError('');
-
     try {
-      await api.post('users/', { username, email, password });
-      alert('Utilizador registado com sucesso! Faça o login para continuar.');
-      onRegisterSuccess();
-    } catch (err) {
-      const errorMessage = Object.values(err.response.data).join('\n');
-      setError(`Não foi possível realizar o registo:\n${errorMessage}`);
-      console.error('Falha no registo', err.response.data);
-    } finally {
-      setIsLoading(false); // Reativa o botão no final
+      await register({ username, password });
+      onRegister();
+    } catch (error) {
+      setError('Falha no cadastro. O usuário pode já existir.');
     }
   };
 
   return (
-    <div className="auth-form-container">
-      <h2>Criar Conta</h2>
-      <form onSubmit={handleRegister}>
-        <div className="form-group">
-          <label htmlFor="username">Utilizador</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Palavra-passe</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <div className="form-actions">
-          {/* --- ALTERAÇÃO AQUI --- */}
-          <button type="submit" className="btn btn-primary" disabled={isLoading}>
-            {isLoading ? 'A registar...' : 'Registar'}
+    <div className="form-page-container">
+       <div className="auth-card">
+        <h2>Crie sua Conta</h2>
+        <p className="auth-subtitle">É rápido e fácil.</p>
+        
+        <form onSubmit={handleSubmit}>
+          {error && <p className="error-message">{error}</p>}
+          <div className="form-group">
+            <label htmlFor="reg-username">Usuário</label>
+            <input
+              type="text"
+              id="reg-username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Escolha um nome de usuário"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="reg-password">Senha</label>
+            <input
+              type="password"
+              id="reg-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Crie uma senha segura"
+              required
+            />
+          </div>
+          <button type="submit" className="btn btn-primary">Cadastrar</button>
+        </form>
+
+        <p className="switch-form-text">
+          Já tem uma conta?{' '}
+          <button onClick={onSwitchToLogin} className="link-button">
+            Faça login
           </button>
-        </div>
-        <div className="switch-form-text">
-          <p>
-            Já tem uma conta?{' '}
-            <button type="button" onClick={onSwitchToLogin}>
-              Login
-            </button>
-          </p>
-        </div>
-      </form>
+        </p>
+      </div>
     </div>
   );
 }

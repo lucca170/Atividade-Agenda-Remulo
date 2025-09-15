@@ -1,25 +1,37 @@
-/* frontend/src/components/StatusPanel.css */
 .status-panel {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
+  display: grid;
+  /* Cria colunas responsivas: 3 em telas grandes, 1 em telas pequenas */
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .status-card {
-    background-color: #f0f0f0;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-    flex-grow: 1;
-    margin: 0 10px;
+  background-color: var(--card-background-color);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
 }
 
-.status-card h4 {
-    margin-top: 0;
+.status-label {
+  font-size: 14px;
+  color: var(--subtle-text-color);
+  margin-bottom: 8px;
+  font-weight: 500;
 }
 
-.status-card p {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 0;
+.status-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.status-value.pending {
+  color: var(--status-pending);
+}
+
+.status-value.completed {
+  color: var(--status-completed);
 }

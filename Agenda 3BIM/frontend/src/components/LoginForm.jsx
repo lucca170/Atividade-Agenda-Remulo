@@ -1,75 +1,66 @@
-// frontend/src/components/LoginForm.jsx
-
 import React, { useState } from 'react';
-import { login } from '../services/api'; 
+import { login } from '../services/api';
 import './Form.css';
 
-// 1. Receba 'onSwitchToForgotPassword' como uma nova prop
-const LoginForm = ({ onLogin, onSwitchToRegister, onSwitchToForgotPassword }) => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+// A props 'onSwitchToRegister' é recebida aqui
+function LoginForm({ onLogin, onSwitchToRegister }) {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError('');
-        try {
-            const response = await login(username, password);
-            localStorage.setItem('token', response.data.token);
-            onLogin();
-        } catch (err) {
-            setError('Falha no login. Verifique seu usuário e senha.');
-            console.error('Login failed', err);
-        }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await login({ username, password });
+      localStorage.setItem('token', response.data.token);
+      onLogin();
+    } catch (error) {
+      setError('Credenciais inválidas. Tente novamente.');
+    }
+  };
 
-    return (
-        <div className="auth-form-container">
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                {/* ... (campos de usuário e senha continuam os mesmos) ... */}
-                <div className="form-group">
-                    <label htmlFor="username">Usuário</label>
-                    <input
-                        type="text"
-                        id="username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">Senha</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                {error && <p className="error-message">{error}</p>}
-                
-                {/* 2. Adicione o link de "Esqueceu a senha?" aqui */}
-                <div className="forgot-password-link" style={{ textAlign: 'right', marginBottom: '15px' }}>
-                    <button type="button" onClick={onSwitchToForgotPassword} className="btn btn-link">
-                        Esqueceu a senha?
-                    </button>
-                </div>
+  return (
+    <div className="form-page-container">
+      <div className="auth-card">
+        <h2>Bem-vindo de volta!</h2>
+        <p className="auth-subtitle">Faça login para acessar sua agenda.</p>
+        
+        <form onSubmit={handleSubmit}>
+          {error && <p className="error-message">{error}</p>}
+          <div className="form-group">
+            <label htmlFor="username">Usuário</label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Digite seu usuário"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Senha</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Digite sua senha"
+              required
+            />
+          </div>
+          <button type="submit" className="btn btn-primary">Entrar</button>
+        </form>
 
-                <button type="submit" className="btn btn-primary">Entrar</button>
-
-                <div className="switch-form-text" style={{ marginTop: '15px', textAlign: 'center' }}>
-                  <p>
-                    Não tem uma conta?{' '}
-                    <button type="button" onClick={onSwitchToRegister} className="btn btn-link">
-                      Registre-se
-                    </button>
-                  </p>
-                </div>
-            </form>
-        </div>
-    );
-};
+        <p className="switch-form-text">
+          Não tem uma conta?{' '}
+          <button onClick={onSwitchToRegister} className="link-button">
+            Cadastre-se
+          </button>
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export default LoginForm;
