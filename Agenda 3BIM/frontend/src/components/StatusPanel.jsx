@@ -1,10 +1,12 @@
 import React from 'react';
 import './StatusPanel.css';
 
-function StatusPanel({ tasks }) {
+// A CORREÇÃO PRINCIPAL ESTÁ AQUI: `tasks = []`
+// Isso garante que 'tasks' NUNCA será 'undefined'. Se não for passado, será uma lista vazia.
+function StatusPanel({ tasks = [] }) {
   const totalTasks = tasks.length;
   const pendingTasks = tasks.filter(task => task.status === 'pendente').length;
-  const completedTasks = totalTasks - pendingTasks;
+  const completedTasks = tasks.filter(task => task.status === 'concluída').length;
 
   return (
     <div className="status-panel">

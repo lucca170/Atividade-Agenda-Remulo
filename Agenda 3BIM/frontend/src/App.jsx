@@ -124,7 +124,9 @@ function App() {
       </header>
       
       <main>
+        {/* GARANTA QUE ESTA LINHA ESTEJA CORRETA */}
         <StatusPanel tasks={tasks} />
+
         <TaskFilter filter={filter} setFilter={setFilter} />
         <TaskList 
           tasks={filteredTasks} 
