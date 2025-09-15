@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { login } from '../services/api'; 
 import './Form.css';
 
-// 1. Receba 'onSwitchToRegister' aqui
-const LoginForm = ({ onLogin, onSwitchToRegister }) => {
+// 1. Receba 'onSwitchToForgotPassword' como uma nova prop
+const LoginForm = ({ onLogin, onSwitchToRegister, onSwitchToForgotPassword }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -27,6 +27,7 @@ const LoginForm = ({ onLogin, onSwitchToRegister }) => {
         <div className="auth-form-container">
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
+                {/* ... (campos de usuário e senha continuam os mesmos) ... */}
                 <div className="form-group">
                     <label htmlFor="username">Usuário</label>
                     <input
@@ -48,9 +49,16 @@ const LoginForm = ({ onLogin, onSwitchToRegister }) => {
                     />
                 </div>
                 {error && <p className="error-message">{error}</p>}
+                
+                {/* 2. Adicione o link de "Esqueceu a senha?" aqui */}
+                <div className="forgot-password-link" style={{ textAlign: 'right', marginBottom: '15px' }}>
+                    <button type="button" onClick={onSwitchToForgotPassword} className="btn btn-link">
+                        Esqueceu a senha?
+                    </button>
+                </div>
+
                 <button type="submit" className="btn btn-primary">Entrar</button>
 
-                {/* 2. Adicione o link para registro aqui */}
                 <div className="switch-form-text" style={{ marginTop: '15px', textAlign: 'center' }}>
                   <p>
                     Não tem uma conta?{' '}
@@ -59,7 +67,6 @@ const LoginForm = ({ onLogin, onSwitchToRegister }) => {
                     </button>
                   </p>
                 </div>
-                
             </form>
         </div>
     );

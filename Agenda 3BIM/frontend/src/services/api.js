@@ -17,6 +17,7 @@ api.interceptors.request.use(config => {
 // --- FUNÇÕES DE AUTENTICAÇÃO ---
 export const login = (username, password) => api.post('token/', { username, password });
 export const register = (username, password, email) => api.post('users/', { username, password, email });
+export const requestPasswordReset = (email) => api.post('password-reset/', { email });
 
 // --- FUNÇÕES DE TAREFAS ---
 export const getTasks = () => api.get('tasks/');

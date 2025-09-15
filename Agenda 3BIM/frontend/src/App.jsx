@@ -5,18 +5,20 @@ import TaskList from './components/TaskList';
 import TaskForm from './components/TaskForm';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
+import ForgotPasswordForm from './components/ForgotPasswordForm'; // Importa o novo componente
 import StatusPanel from './components/StatusPanel';
-import TaskFilter from './components/TaskFilter'; // 1. IMPORTAR O NOVO COMPONENTE
+import TaskFilter from './components/TaskFilter';
 import './app.css';
 
 const App = () => {
     const [tasks, setTasks] = useState([]);
     const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
-    const [showRegister, setShowRegister] = useState(false);
+    
+    // Estado para controlar qual formulário de autenticação é exibido
+    const [authView, setAuthView] = useState('login'); // 'login', 'register', ou 'forgotPassword'
+    
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [taskToEdit, setTaskToEdit] = useState(null);
-    
-    // 2. ADICIONAR ESTADOS PARA OS FILTROS
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
 
@@ -40,6 +42,7 @@ const App = () => {
 
     const handleLogin = () => {
         setIsLoggedIn(true);
+        setAuthView('login'); // Garante que, ao fazer logout e login de novo, a vista padrão seja 'login'
     };
 
     const handleLogout = () => {
@@ -72,31 +75,39 @@ const App = () => {
         setIsModalOpen(false);
     };
     
-    // 3. LÓGICA PARA FILTRAR AS TAREFAS
     const filteredTasks = tasks.filter(task => {
         const matchesStatus = statusFilter === 'all' || task.status === statusFilter;
         const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase());
         return matchesStatus && matchesSearch;
     });
 
+    // Bloco de renderização para quando o utilizador NÃO está logado
     if (!isLoggedIn) {
         return (
             <div className="auth-container">
-                {showRegister ? (
-                    <RegisterForm
-                        onRegisterSuccess={() => setShowRegister(false)}
-                        onSwitchToLogin={() => setShowRegister(false)}
-                    />
-                ) : (
+                {authView === 'login' && (
                     <LoginForm
                         onLogin={handleLogin}
-                        onSwitchToRegister={() => setShowRegister(true)}
+                        onSwitchToRegister={() => setAuthView('register')}
+                        onSwitchToForgotPassword={() => setAuthView('forgotPassword')}
+                    />
+                )}
+                {authView === 'register' && (
+                    <RegisterForm
+                        onRegisterSuccess={() => setAuthView('login')}
+                        onSwitchToLogin={() => setAuthView('login')}
+                    />
+                )}
+                {authView === 'forgotPassword' && (
+                    <ForgotPasswordForm
+                        onSwitchToLogin={() => setAuthView('login')}
                     />
                 )}
             </div>
         );
     }
 
+    // Bloco de renderização para quando o utilizador ESTÁ logado
     return (
         <div className="app-container">
             <header>
@@ -106,9 +117,8 @@ const App = () => {
                 </button>
             </header>
             <main>
-                <StatusPanel tasks={tasks} /> {/* Painel de status continua mostrando o total */}
+                <StatusPanel tasks={tasks} />
                 
-                {/* 4. RENDERIZAR O COMPONENTE DE FILTRO */}
                 <TaskFilter
                     onSearchChange={setSearchTerm}
                     onStatusChange={setStatusFilter}
@@ -123,7 +133,7 @@ const App = () => {
                 </div>
 
                 <TaskList
-                    tasks={filteredTasks} // 5. PASSAR A LISTA JÁ FILTRADA
+                    tasks={filteredTasks}
                     onTaskDeleted={handleTaskDeleted}
                     onTaskUpdated={handleTaskUpdated}
                     onEditTask={openModalForEdit}
