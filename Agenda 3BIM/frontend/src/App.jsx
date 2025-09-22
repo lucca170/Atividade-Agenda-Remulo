@@ -1,3 +1,5 @@
+// frontend/src/App.jsx
+
 import React, { useState, useEffect } from 'react';
 import { getTasks, createTask, updateTask, deleteTask } from './services/api';
 import TaskList from './components/TaskList';
@@ -17,6 +19,7 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
   const [isRegistering, setIsRegistering] = useState(false);
+  const [theme, setTheme] = useState('light');
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -27,6 +30,15 @@ function App() {
   useEffect(() => {
     filterTasks();
   }, [tasks, filter]);
+
+  useEffect(() => {
+    document.body.className = theme === 'dark' ? 'dark-theme' : '';
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+  };
+
 
   const loadTasks = async () => {
     try {
@@ -120,11 +132,15 @@ function App() {
     <div className="app-container">
       <header className="app-header">
         <h1>Minha Agenda</h1>
-        <button onClick={handleLogout} className="logout-button">Sair</button>
+        <div>
+          <button onClick={toggleTheme} className="theme-toggle-button">
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
+          <button onClick={handleLogout} className="logout-button">Sair</button>
+        </div>
       </header>
       
       <main>
-        {/* GARANTA QUE ESTA LINHA ESTEJA CORRETA */}
         <StatusPanel tasks={tasks} />
 
         <TaskFilter filter={filter} setFilter={setFilter} />

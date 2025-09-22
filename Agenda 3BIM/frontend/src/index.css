@@ -1,15 +1,32 @@
+/* frontend/src/index.css */
+
 /* Importa a fonte 'Inter' do Google Fonts para um visual mais moderno */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 /* Define variáveis de cor para fácil manutenção e consistência */
 :root {
-  --primary-color: #6D28D9; /* Um roxo vibrante e moderno */
-  --primary-color-hover: #5B21B6; /* Um tom mais escuro para efeitos de hover */
-  --background-color: #F3F4F6; /* Cinza bem claro para o fundo da página */
-  --card-background-color: #FFFFFF; /* Branco para os cards */
-  --text-color: #1F2937; /* Cinza escuro para textos, mais suave que o preto puro */
-  --subtle-text-color: #6B7280; /* Cinza mais claro para textos secundários */
-  --border-color: #D1D5DB; /* Cor para bordas de inputs e outros elementos */
-  
-  --status-pending: #F59E0B; /* Amarelo para status pendente */
+  --primary-color: #6D28D9;
+  --primary-color-hover: #5B21B6;
+  --status-pending: #F59E0B;
+
+  --background-color: #F3F4F6;
+  --card-background-color: #FFFFFF;
+  --text-color: #1F2937;
+  --subtle-text-color: #6B7280;
+  --border-color: #D1D5DB;
+}
+
+body.dark-theme {
+    --background-color: #111827;
+    --card-background-color: #1F2937;
+    --text-color: #F9FAFB;
+    --subtle-text-color: #9CA3AF;
+    --border-color: #4B5563;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
