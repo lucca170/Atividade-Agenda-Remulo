@@ -16,7 +16,10 @@ const CheckIcon = () => (
 );
 
 
-function TaskList({ tasks, onEdit, onDelete, onToggleStatus }) {
+// --- CORREÇÃO APLICADA AQUI ---
+// Se 'tasks' for undefined, ele assumirá o valor de um array vazio [].
+function TaskList({ tasks = [], onEdit, onDelete, onToggleStatus }) {
+  // Agora esta linha é 100% segura. Se tasks for undefined, tasks.length será 0.
   if (tasks.length === 0) {
     return <div className="empty-state">
         <h3>Nenhuma tarefa aqui!</h3>
