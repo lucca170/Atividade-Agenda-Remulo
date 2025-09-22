@@ -15,8 +15,9 @@ api.interceptors.request.use(config => {
 });
 
 // --- FUNÇÕES DE AUTENTICAÇÃO ---
-export const login = (username, password) => api.post('token/', { username, password });
-export const register = (username, password, email) => api.post('users/', { username, password, email });
+// CORREÇÃO: As funções agora recebem um único objeto com os dados.
+export const login = (credentials) => api.post('token/', credentials);
+export const register = (userData) => api.post('users/', userData);
 export const requestPasswordReset = (email) => api.post('password-reset/', { email });
 
 // --- FUNÇÕES DE TAREFAS ---
