@@ -2,69 +2,73 @@ import React, { useState, useEffect } from 'react';
 
 function TaskForm({ task, onSave, onCancel }) {
   const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
-  const [status, setStatus] = useState('pendente'); // Define 'pendente' como padrão
 
   useEffect(() => {
-    // Se estiver editando uma tarefa, preenche o formulário com os dados dela
     if (task) {
-      setTitle(task.title);
-      setDueDate(task.dueDate ? task.dueDate.split('T')[0] : '');
-      setStatus(task.status);
-    } else {
-      // Se for uma nova tarefa, reseta o formulário
-      setTitle('');
-      setDueDate('');
-      setStatus('pendente');
+      setTitle(task.title || '');
+      setDescription(task.description || '');
+      // Ajusta o formato da data para o input tipo 'date' e usa task.due_date
+      setDueDate(task.due_date ? task.due_date.split('T')[0] : '');
     }
   }, [task]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave({ ...task, title, dueDate, status });
+    if (!title || !dueDate) {
+      alert('Por favor, preencha o título e a data de entrega.');
+      return;
+    }
+    
+    // Monta o objeto a ser salvo, usando 'id' e 'due_date'
+    const taskData = {
+      ...(task && { id: task.id }),
+      title,
+      description,
+      due_date: dueDate,
+      // Garante que o status seja enviado corretamente
+      status: task ? task.status : 'pendente'
+    };
+    onSave(taskData);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="task-form">
       <div className="form-group">
-        <label htmlFor="task-title">Título</label>
+        <label htmlFor="title">Título</label>
         <input
-          id="task-title"
           type="text"
+          id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Ex: Estudar React"
           required
         />
       </div>
       <div className="form-group">
-        <label htmlFor="task-dueDate">Data de Vencimento</label>
+        <label htmlFor="description">Descrição</label>
+        <textarea
+          id="description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="dueDate">Data de Entrega</label>
         <input
-          id="task-dueDate"
           type="date"
+          id="dueDate"
           value={dueDate}
           onChange={(e) => setDueDate(e.target.value)}
           required
         />
       </div>
-      <div className="form-group">
-        <label htmlFor="task-status">Status</label>
-        <select 
-            id="task-status"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-        >
-            <option value="pendente">Pendente</option>
-            <option value="concluída">Concluída</option>
-        </select>
-      </div>
-
-      <div className="modal-actions">
-        <button type="button" onClick={onCancel} className="btn btn-secondary">
+      <div className="form-actions">
+        <button type="button" onClick={onCancel} className="btn-cancel">
           Cancelar
         </button>
-        <button type="submit" className="btn btn-primary">
-          Salvar Tarefa
+        <button type="submit" className="btn-save">
+          Salvar
         </button>
       </div>
     </form>

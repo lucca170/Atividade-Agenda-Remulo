@@ -1,23 +1,19 @@
-// frontend/src/components/TaskList.jsx
 import React from 'react';
 import './TaskList.css';
 
 const TaskList = ({ tasks, onEdit, onDelete, onToggleStatus }) => {
-  // Sort tasks: pending tasks first, then by due date
-  const sortedTasks = [...tasks].sort((a, b) => {
-    if (a.status === 'pendente' && b.status !== 'pendente') return -1;
-    if (a.status !== 'pendente' && b.status === 'pendente') return 1;
-    return new Date(a.dueDate) - new Date(b.dueDate);
-  });
-
-  if (sortedTasks.length === 0) {
+  if (tasks.length === 0) {
     return <p className="no-tasks-message">Nenhuma tarefa encontrada. Que tal adicionar uma?</p>;
   }
+
+  // A ordenação já é feita no Dashboard, mas podemos garantir aqui se necessário.
+  const sortedTasks = [...tasks];
 
   return (
     <div className="task-list">
       {sortedTasks.map((task) => (
-        <div key={task._id} className={`task-card ${task.status === 'concluída' ? 'task-completed' : 'task-pending'}`}>
+        // Corrigido para usar task.id como key
+        <div key={task.id} className={`task-card ${task.status === 'concluída' ? 'task-completed' : 'task-pending'}`}>
           <div className="task-info">
             <h3 className="task-title">{task.title}</h3>
             <p className="task-description">{task.description}</p>
@@ -25,7 +21,8 @@ const TaskList = ({ tasks, onEdit, onDelete, onToggleStatus }) => {
 
           <div className="task-details">
             <span className="task-due-date">
-              Data de Entrega: <strong>{new Date(task.dueDate).toLocaleDateString('pt-BR')}</strong>
+              {/* Corrigido para usar task.due_date */}
+              Data de Entrega: <strong>{new Date(task.due_date).toLocaleDateString('pt-BR')}</strong>
             </span>
             <span className={`task-status ${task.status === 'concluída' ? 'status-label-completed' : 'status-label-pending'}`}>
               {task.status === 'concluída' ? 'Concluída' : 'Pendente'}
@@ -49,7 +46,8 @@ const TaskList = ({ tasks, onEdit, onDelete, onToggleStatus }) => {
             </button>
             <button
               className="btn btn-delete"
-              onClick={() => onDelete(task._id)}
+              // Corrigido para usar task.id na exclusão
+              onClick={() => onDelete(task.id)}
               title="Excluir Tarefa"
             >
               Excluir
