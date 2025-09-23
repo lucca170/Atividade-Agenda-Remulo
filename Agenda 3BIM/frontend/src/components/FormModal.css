@@ -1,0 +1,57 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(17, 24, 39, 0.6); /* Fundo mais escuro e moderno */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 16px;
+  backdrop-filter: blur(4px); /* Efeito de desfoque no fundo */
+}
+
+.modal-content {
+  background: var(--card-background-color);
+  padding: 24px 28px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-size: 22px;
+}
+
+.modal-content .form-group {
+    margin-bottom: 20px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* Botão secundário para "Cancelar" */
+.btn-secondary {
+  background-color: #E5E7EB;
+  color: #4B5563;
+  border: none;
+}
+
+.btn-secondary:hover {
+  background-color: #D1D5DB;
+}
+
+/* No modal, os botões não precisam ocupar 100% da largura */
+.modal-actions .btn {
+    width: auto;
+    min-width: 100px;
+}

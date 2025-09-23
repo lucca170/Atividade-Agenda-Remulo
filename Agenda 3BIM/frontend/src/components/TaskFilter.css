@@ -1,0 +1,30 @@
+/* frontend/src/components/TaskFilter.css */
+
+.task-filter {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.task-filter button {
+  background-color: var(--card-background-color);
+  border: 1px solid var(--border-color);
+  color: var(--subtle-text-color);
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.task-filter button:hover {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.task-filter button.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
